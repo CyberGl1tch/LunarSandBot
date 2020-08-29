@@ -1,0 +1,24 @@
+
+# netbeans
+/nbproject
+
+# we use maven!
+/build.xml
+
+# maven
+/target
+
+
+# various other potential build files
+/build
+/bin
+/dist
+/manifest.mf
+
+/world
+
+# intellij
+*.iml
+*.ipr
+*.iws
+.idea/

@@ -1,0 +1,164 @@
+#######################################################################################
+#        _                            _____                 _______       _           #
+#       | |                          /  ___|               | | ___ \     | |          #
+#       | |    _   _ _ __   __ _ _ __\ `--.  __ _ _ __   __| | |_/ / ___ | |_         #
+#       | |   | | | | '_ \ / _` | '__|`--. \/ _` | '_ \ / _` | ___ \/ _ \| __|        #
+#       | |___| |_| | | | | (_| | |  /\__/ / (_| | | | | (_| | |_/ / (_) | |_         #
+#       \_____/\__,_|_| |_|\__,_|_|  \____/ \__,_|_| |_|\__,_\____/ \___/ \__|        #
+#                                                                                     #
+#######################################################################################
+
+
+
+##################################################
+#              SandBot Profile item              #
+##################################################
+bot-profile: "&5&lLunarSandBot"
+bot-profile-lore:
+  - "&d* &2&lOwner: &5%botowner%"
+  - "&d* &2&lFaction &d%botfaction%"
+  - "&d* &2&lBalance &d%balance%"
+  - "&d* &2&lActivated &d%isActivated%"
+  - "&d* &2&lLapisBlocks &d%blocksd%"
+  - "&d* &2&lLocation: &eX: &d%botlocationx%&e Y: &d%botlocationy%&e Z: &d%botlocationz%"
+
+
+##################################################
+#              SandBot Balance item              #
+##################################################
+bot-balance-button-name: "&5&lBalance"
+bot-balance-button-lore:
+  - "&7Click to add balance."
+  - ""
+  - "&d* &2&lBalance: &6%balance%$"
+bot-balance-button-texture: "54bf893fc6defad218f7836efefbe636f1c2cc1bb650c82fccd99f2c1ee6"
+
+
+##################################################
+#              SandBot Core item                 #
+##################################################
+bot-core-button-name: "&5&lToggle"
+bot-core-button-lore:
+  - "&7Click to toggle the bot."
+  - ""
+  - "&d* &2&lEnabled: &e%isActivated%"
+bot-core-button-texture: "32fa8f38c7b22096619c3a6d6498b405530e48d5d4f91e2aacea578844d5c67"
+
+
+##################################################
+#              SandBot Remove item               #
+##################################################
+bot-remove-button-name: "&c&lRemove"
+bot-remove-button-lore:
+  - "&7Click to remove the bot."
+bot-remove-button-texture: "3ed1aba73f639f4bc42bd48196c715197be2712c3b962c97ebf9e9ed8efa025"
+
+
+##################################################
+#              Remove Profile Items              #
+##################################################
+bot-confirm-button-name: "&2&lConfirm"
+bot-confirm-button-lore:
+  - "&7Click here to remove the bot."
+bot-confirm-button-texture: "a92e31ffb59c90ab08fc9dc1fe26802035a3a47c42fee63423bcdb4262ecb9b6"
+
+bot-cancel-button-name: "&c&lCancel"
+bot-cancel-button-lore:
+  - "&7Click here to cancel the process."
+bot-cancel-button-texture: "beb588b21a6f98ad1ff4e085c552dcb050efc9cab427f46048f18fc803475f7"
+
+
+##################################################
+#              SandBot Messages                  #
+##################################################
+insufficient-balance-bot: "&8&l[&c&l!&8&l] &7SandBot has no balance to return."
+insufficient-balance-player: "&8&l[&c&l!&8&l] &7You dont have balance."
+remove-canceled: "&8&l[&2&l!&8&l] &7Remove canceled successfully."
+remove-succeed: "&8&l[&2&l!&8&l] &7SandBot removed successfully."
+cash-back: "&8&l[&2&l!&8&l] &7You have received &6%amount%$&7."
+no-faction: "&8&l[&c&l!&8&l] &7You are not in any faction."
+no-claim: "&8&l[&c&l!&8&l] &7You can place Sandbots only in your factions claimed teritories."
+faction-bot-full: "&8&l[&c&l!&8&l] &7You cant place more than 2 bots in your faction. Type &5/f sandbots &7to locate your faction bots."
+no-perm: "&8&l[&c&l!&8&l] &7Insufficient permission!"
+not-bot-owner: "&8&l[&c&l!&8&l] &7Only bot owner %botowner% and faction admins can remove the bot!."
+bot-close-to-each-other: "&8&l[&c&l!&8&l] &7Cant place sandbots close to each other you need to go %distance% more blocks away"
+not-your-faction-bots: "&8&l[&c&l!&8&l] &7You cant edit other factions sandbots"
+f-disband: "&8&l[&2&l!&8&l] &7You got %amount% sandbots due to faction disband!"
+f-unclaim: "&8&l[&2&l!&8&l] &7You got %amount% sandbots due to faction unclaim land!"
+##################################################
+#              SandBot Use Item                  #
+##################################################
+bot-spawn-item-name: "&5&lLunar Sandbot"
+bot-spawn-item-material: monster_egg
+bot-spawn-item-lore:
+  - "&8&m#---------------------------------------#"
+  - "&2&lDescription"
+  - "&7Place this bot down to spawn a sandbot."
+  - ""
+  - "&2&lInformation"
+  - "&7After placing down the bot, you are able to"
+  - "&7place Lapis blocks on a radius of 10x5x10 and"
+  - "&7the bot will start placing sand under them."
+  - "&7You can also use &5/f sandbots &7to check how"
+  - "&7many bots your faction has enabled since"
+  - "&7the limit is 2 at a time."
+  - "&8&m#---------------------------------------#"
+  - ""
+  - "&8&l[&2&l!&8&l] &7Right-Click to place."
+
+
+##################################################
+#              SandBot Fill Settings             #
+##################################################
+bot-custom-name: "&8&l[&b&l!&8&l] &a%faction% &7SandBot"
+bot-fill-radius: 10
+target-block: lapis_block
+fall-speed: 1
+sand-spawn-speed: 5 #In ticks 20ticks = 1 Second
+sand-cost: 10
+money-to-add: 1000
+#You can set this number whatever you want but only 7 sandbots will be displayed in /f sandbots for now! will be updated in next version
+faction-bot-limit: 2
+##################################################
+#                Sandbot Animations              #
+##################################################
+bot-animate-hand: true
+bot-animate-armor: true
+
+
+##################################################
+#              SandBot Main Gui Settings         #
+##################################################
+main-gui-title: "&5&lSandbot"
+main-gui-glass-from: LIME_STAINED_GLASS_PANE
+main-gui-glass-to: BLACK_STAINED_GLASS_PANE
+main-gui-glass-fill1: MAGENTA_STAINED_GLASS_PANE
+main-gui-glass-fill2: PURPLE_STAINED_GLASS_PANE
+
+
+##################################################
+#           SandBot confirm Gui Settings         #
+##################################################
+confirm-gui-title: "&5&lConfirm"
+confirm-gui-glass-from: PURPLE_STAINED_GLASS_PANE
+confirm-gui-glass-to: LIME_STAINED_GLASS_PANE
+confirm-gui-glass-fill: MAGENTA_STAINED_GLASS_PANE
+
+
+##################################################
+#           SandBot sandbots Gui Settings        #
+##################################################
+sandbots-gui-title: "&5&lAvailable Sandbots"
+sandbots-gui-glass-from: PURPLE_STAINED_GLASS_PANE
+sandbots-gui-glass-to: LIME_STAINED_GLASS_PANE
+sandbots-gui-glass-fill: MAGENTA_STAINED_GLASS_PANE
+
+
+##################################################
+#                Command Settings                #
+##################################################
+command-usage: "&8&l[&2&l!&8&l] &7Usage: &5/sandbot give &d<player> <amount>"
+command-amount-error: "&8&l[&c&l!&8&l] &7Please use numerical values."
+command-player-error: "&8&l[&c&l!&8&l] &7Cant find player."
+command-reload: "&8&l[&5&l!&8&l] &7Plugin config and data reloaded successfully!"
+command-succeed: "&8&l[&2&l!&8&l] &7You successfully gave &5%player% &ex%amount% &7sandbot item."
