@@ -2,14 +2,14 @@
 # netbeans
 /nbproject
 
-# we use maven!
+#Maven
 /build.xml
 
-# maven
+#Maven
 /target
 
 
-# various other potential build files
+#Build files
 /build
 /bin
 /dist
@@ -17,7 +17,7 @@
 
 /world
 
-# intellij
+# Intellij
 *.iml
 *.ipr
 *.iws
