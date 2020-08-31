@@ -86,6 +86,11 @@
             <url>http://ci.ender.zone/plugin/repository/everything/</url>
         </repository>
 
+        <repository>
+            <id>savagelabs</id>
+            <url>https://nexus.savagelabs.net/repository/maven-releases</url>
+        </repository>
+
     </repositories>
 
     <dependencies>
@@ -129,6 +134,7 @@
             <groupId>com.github.SaberLLC</groupId>
             <artifactId>Saber-Factions</artifactId>
             <version>2.3.3-STABLE</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.massivecraft</groupId>
@@ -141,6 +147,11 @@
             <artifactId>XSeries</artifactId>
             <version>6.0.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>net.prosavage.factionsx</groupId>
+            <artifactId>FactionsX</artifactId>
+            <version>0.3-PATREON</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>
