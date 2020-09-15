@@ -1,6 +1,7 @@
 package me.magas8.Managers;
 
 
+import me.magas8.LunarSandBot;
 import me.magas8.Utils.utils;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -122,15 +123,13 @@ public class SandBot {
         this.animate = animate;
         if(utils.getArmorAnimateBoolean() && sandbotModel != null && sandbotModel.isValid( )&& !sandbotModel.isDead()) {
             if (animate) {
-                Color c = Color.fromRGB(25, 120, 50);
-                sandbotModel.setChestplate(utils.getColorArmor(Material.LEATHER_CHESTPLATE, c));
-                sandbotModel.setLeggings(utils.getColorArmor(Material.LEATHER_LEGGINGS, c));
-                sandbotModel.setBoots(utils.getColorArmor(Material.LEATHER_BOOTS, c));
+                sandbotModel.setChestplate(utils.getColorArmor(Material.LEATHER_CHESTPLATE, utils.enabledArmorColor));
+                sandbotModel.setLeggings(utils.getColorArmor(Material.LEATHER_LEGGINGS, utils.enabledArmorColor));
+                sandbotModel.setBoots(utils.getColorArmor(Material.LEATHER_BOOTS, utils.enabledArmorColor));
             } else {
-                Color c = Color.fromRGB(186, 0, 0);
-                sandbotModel.setChestplate(utils.getColorArmor(Material.LEATHER_CHESTPLATE, c));
-                sandbotModel.setLeggings(utils.getColorArmor(Material.LEATHER_LEGGINGS, c));
-                sandbotModel.setBoots(utils.getColorArmor(Material.LEATHER_BOOTS, c));
+                sandbotModel.setChestplate(utils.getColorArmor(Material.LEATHER_CHESTPLATE, utils.disabledArmorColor));
+                sandbotModel.setLeggings(utils.getColorArmor(Material.LEATHER_LEGGINGS, utils.disabledArmorColor));
+                sandbotModel.setBoots(utils.getColorArmor(Material.LEATHER_BOOTS, utils.disabledArmorColor));
             }
         }
     }

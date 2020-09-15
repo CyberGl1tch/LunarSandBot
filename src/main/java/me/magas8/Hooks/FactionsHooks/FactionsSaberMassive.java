@@ -1,6 +1,8 @@
 package me.magas8.Hooks.FactionsHooks;
 
 import com.massivecraft.factions.*;
+
+
 import com.massivecraft.factions.struct.Role;
 import me.magas8.Hooks.FactionHook;
 import org.bukkit.Location;
@@ -11,7 +13,6 @@ public class FactionsSaberMassive extends FactionHook {
 
     @Override
     public Boolean isFactionAdmin(Player player) {
-//todo see how can i use saber and UUID same jar
         if(FPlayers.getInstance().getByPlayer(player).getRole().equals(Role.valueOf("COLEADER")) || FPlayers.getInstance().getByPlayer(player).getRole().equals(Role.valueOf("MODERATOR")) || FPlayers.getInstance().getByPlayer(player).getRole().equals(Role.valueOf("LEADER"))){
             return true;
         }

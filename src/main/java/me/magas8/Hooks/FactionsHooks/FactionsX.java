@@ -5,7 +5,6 @@ import net.prosavage.factionsx.core.Faction;
 import net.prosavage.factionsx.manager.FactionManager;
 import net.prosavage.factionsx.manager.GridManager;
 import net.prosavage.factionsx.manager.PlayerManager;
-import net.prosavage.factionsx.persist.data.FLocation;
 import net.prosavage.factionsx.util.MemberAction;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -25,8 +24,7 @@ public class FactionsX extends FactionHook {
 
     @Override
     public String getFactionTag(Player player) {
-        if (PlayerManager.INSTANCE.getFPlayer(player).getFaction().isWilderness() ||PlayerManager.INSTANCE.getFPlayer(player).getFaction().isSafezone() || PlayerManager.INSTANCE.getFPlayer(player).getFaction().isWarzone() )
-            return null;
+        if (PlayerManager.INSTANCE.getFPlayer(player).getFaction().isWilderness() ||PlayerManager.INSTANCE.getFPlayer(player).getFaction().isSafezone() || PlayerManager.INSTANCE.getFPlayer(player).getFaction().isWarzone() ) return null;
         return PlayerManager.INSTANCE.getFPlayer(player).getFaction().getTag();
     }
     @Override
@@ -58,10 +56,8 @@ public class FactionsX extends FactionHook {
 
     @Override
     public String getFactionIdAtLocation(Location loc) {
-
-        FLocation floc = new FLocation((long)loc.getX(),(long)loc.getZ(),loc.getWorld().getName());
-        Faction locfaction = GridManager.INSTANCE.getFactionAt(floc);
-        if(!locfaction.isSystemFaction()) return null;
+        Faction locfaction = GridManager.INSTANCE.getFactionAt(loc.getChunk());
+        if(locfaction.isSystemFaction()) return null;
         if(locfaction.isSafezone() || locfaction.isWarzone() || locfaction.isWilderness()) return null;
         return String.valueOf(locfaction.getId());
     }

@@ -12,7 +12,6 @@ import me.magas8.GUIS.MenuManager;
 import me.magas8.GUIS.RemoveGUI;
 import me.magas8.GUIS.SandBotGui;
 import me.magas8.Hooks.FactionHook;
-import me.magas8.Hooks.PluginHooks;
 import me.magas8.LunarSandBot;
 import me.magas8.Managers.ItemBuilder;
 import me.magas8.Managers.SandBot;
@@ -32,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class utils {
     private static LunarSandBot plugin = LunarSandBot.getPlugin(LunarSandBot.class);
@@ -39,6 +39,8 @@ public class utils {
     public static String color(String s) {
         return ChatColor.translateAlternateColorCodes('&', s);
     }
+    public static Color enabledArmorColor = Color.fromRGB(plugin.getConfig().getInt("bot-enabled-red"), plugin.getConfig().getInt("bot-enabled-green"), plugin.getConfig().getInt("bot-enabled-blue"));
+    public static Color disabledArmorColor = Color.fromRGB(plugin.getConfig().getInt("bot-disabled-red"), plugin.getConfig().getInt("bot-disabled-green"), plugin.getConfig().getInt("bot-disabled-blue"));
 
 
     public static void dropitem(Player player, Location loc, ItemStack item){
@@ -56,7 +58,7 @@ public class utils {
             player.sendMessage(utils.color(plugin.getConfig().getString("no-faction")));
             return;
         }
-        if(factionHook.getFactionIdAtLocation(player.getLocation()) != factionHook.getFactionId(player)){
+        if(factionHook.getFactionIdAtLocation(loc) == null || !factionHook.getFactionIdAtLocation(loc).equals(factionHook.getFactionId(player))){
             player.sendMessage(utils.color(plugin.getConfig().getString("no-claim")));
             return;
         }
@@ -85,7 +87,7 @@ public class utils {
         stand.setGravity(false);
         stand.setSmall(false);
         stand.setBasePlate(false);
-        //stand.setMarker(true);
+
         stand.setItemInHand(new ItemStack(Material.SAND));
 
         ItemStack playerhead = new ItemStack(Material.SKULL_ITEM,1,(byte) 3);
@@ -96,10 +98,9 @@ public class utils {
         stand.setCustomName("ignoreArmorstand");
 
         stand.setHelmet(playerhead);
-        Color c = Color.fromRGB(186, 0, 0);
-        stand.setChestplate(utils.getColorArmor(Material.LEATHER_CHESTPLATE, c));
-        stand.setLeggings(utils.getColorArmor(Material.LEATHER_LEGGINGS, c));
-        stand.setBoots(utils.getColorArmor(Material.LEATHER_BOOTS, c));
+        stand.setChestplate(utils.getColorArmor(Material.LEATHER_CHESTPLATE, disabledArmorColor));
+        stand.setLeggings(utils.getColorArmor(Material.LEATHER_LEGGINGS, disabledArmorColor));
+        stand.setBoots(utils.getColorArmor(Material.LEATHER_BOOTS, disabledArmorColor));
 
         EulerAngle rarm = stand.getRightArmPose();
         EulerAngle larm = stand.getLeftArmPose();
@@ -121,7 +122,7 @@ public class utils {
         SandBot bot = new SandBot(stand,player);
         LunarSandBot.sandBots.add(bot);
 
-        HashMap<GuiTypes, MenuManager> menus = new HashMap<>();
+        ConcurrentHashMap<GuiTypes, MenuManager> menus = new ConcurrentHashMap<>();
         menus.put(GuiTypes.REMOVEGUI,new RemoveGUI(plugin,bot));
         menus.put(GuiTypes.FACTIONGUI,new FactionManageGui(plugin));
         menus.put(GuiTypes.SANDBOTGUI,new SandBotGui(plugin,bot));
@@ -211,7 +212,7 @@ public class utils {
 
                 LunarSandBot.sandBots.add(bot);
                 bot.getLocation().getChunk().load();
-                HashMap<GuiTypes, MenuManager> menus = new HashMap<>();
+                ConcurrentHashMap<GuiTypes, MenuManager> menus = new ConcurrentHashMap<>();
                 menus.put(GuiTypes.REMOVEGUI,new RemoveGUI(plugin,bot));
                 menus.put(GuiTypes.FACTIONGUI,new FactionManageGui(plugin));
                 menus.put(GuiTypes.SANDBOTGUI,new SandBotGui(plugin,bot));
@@ -276,7 +277,7 @@ public class utils {
             updatedPlaceholdersLore.add(s.replace("%botowner%",bot.getOwnerName())
             .replace("%botfaction%",factionHook.getFactionTag(Bukkit.getServer().getOfflinePlayer(bot.getOwnerUUID())))
             .replace("%balance%",bot.getBalance().toString())
-            .replace("%isActivated%",String.valueOf(bot.isActivated()).toUpperCase())
+            .replace("%isActivated%", bot.isActivated() ? plugin.getConfig().getString("bot-core-enabled-placeholder") : plugin.getConfig().getString("bot-core-disabled-placeholder"))
             .replace("%blocksd%",String.valueOf(bot.getLapisBlocks().size()))
             .replace("%botlocationx%",String.valueOf(bot.getLocation().getX()))
             .replace("%botlocationy%",String.valueOf(bot.getLocation().getY()))
@@ -292,7 +293,7 @@ public class utils {
             updatedPlaceholdersLore.add(s.replace("%botowner%",bot.getOwnerName())
                     .replace("%botfaction%",factionHook.getFactionTag(Bukkit.getServer().getOfflinePlayer(bot.getOwnerUUID())))
                     .replace("%balance%",bot.getBalance().toString())
-                    .replace("%isActivated%",String.valueOf(bot.isActivated()).toUpperCase())
+                    .replace("%isActivated%",bot.isActivated() ? plugin.getConfig().getString("bot-core-enabled-placeholder") : plugin.getConfig().getString("bot-core-disabled-placeholder"))
                     .replace("%blocksd%",String.valueOf(bot.getLapisBlocks().size()))
                     .replace("%botlocationx%",String.valueOf(bot.getLocation().getX()))
                     .replace("%botlocationy%",String.valueOf(bot.getLocation().getY()))
@@ -315,4 +316,5 @@ public class utils {
     public static boolean getArmorAnimateBoolean(){
         return plugin.getConfig().getBoolean("bot-animate-armor");
     }
+
 }

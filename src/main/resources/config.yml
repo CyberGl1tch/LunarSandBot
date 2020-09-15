@@ -43,6 +43,8 @@ bot-core-button-lore:
   - ""
   - "&d* &2&lEnabled: &e%isActivated%"
 bot-core-button-texture: "32fa8f38c7b22096619c3a6d6498b405530e48d5d4f91e2aacea578844d5c67"
+bot-core-enabled-placeholder: "True"
+bot-core-disabled-placeholder: "False"
 
 
 ##################################################
@@ -124,6 +126,15 @@ faction-bot-limit: 2
 ##################################################
 bot-animate-hand: true
 bot-animate-armor: true
+#SandBots Armor Colors. Bot will spawn with disabled colors!
+#EnabledColors
+bot-enabled-red: 25
+bot-enabled-green: 120
+bot-enabled-blue: 50
+#Disabled Colors
+bot-disabled-red: 186
+bot-disabled-green: 0
+bot-disabled-blue: 0
 
 
 ##################################################

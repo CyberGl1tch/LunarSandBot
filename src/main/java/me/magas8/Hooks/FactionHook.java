@@ -1,10 +1,8 @@
 package me.magas8.Hooks;
 
-import me.magas8.Hooks.FactionsHooks.BeastFactions;
 import me.magas8.Hooks.FactionsHooks.FactionsSaberMassive;
-import me.magas8.Hooks.FactionsHooks.FactionsUUID;
+import me.magas8.Hooks.FactionsHooks.FactionsUuid;
 import me.magas8.Hooks.FactionsHooks.FactionsX;
-import me.magas8.LunarSandBot;
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,16 +14,16 @@ import org.bukkit.plugin.Plugin;
 public class FactionHook implements PluginHooks<FactionHook> {
     private Plugin plugin;
     public static String hookName = "Factions";
+    public static String realName = "Factions";
     @Override
     public FactionHook setup() {
-        if (Bukkit.getPluginManager().isPluginEnabled("FactionsX")) {
+        if (Bukkit.getServer().getPluginManager().getPlugin("FactionsX") !=null) {
             hookName = "FactionsX";
-            Bukkit.getConsoleSender().sendMessage("Not Supported yet "+hookName);
-            //return (FactionHook)new FactionsX();
+            realName = "FactionsX";
+            return (FactionHook)new FactionsX();
         }
-        if (Bukkit.getPluginManager().isPluginEnabled("BeastFactions")) {
+        if (Bukkit.getServer().getPluginManager().getPlugin("BeastFactions") !=null) {
             hookName = "BeastFactions";
-            Bukkit.getConsoleSender().sendMessage("Not Supported yet "+hookName);
             //return (FactionHook)new BeastFactions();
         }
         try {
@@ -33,12 +31,11 @@ public class FactionHook implements PluginHooks<FactionHook> {
         } catch (NullPointerException nullPointerException) {
             return null;
         }
-        if (!plugin.getDescription().getAuthors().contains("ProSavage") && (plugin.getDescription().getAuthors().contains("drtshock") || plugin.getDescription().getAuthors().contains("Benzimmer"))) {
+        if (plugin!=null && !plugin.getDescription().getAuthors().contains("ProSavage") && (plugin.getDescription().getAuthors().contains("drtshock") || plugin.getDescription().getAuthors().contains("Benzimmer"))) {
             hookName = "FactionsUUID";
-            Bukkit.getConsoleSender().sendMessage("Successfully hooked "+hookName);
-            return (FactionHook)new FactionsUUID();
+            realName = "Factions";
+            return (FactionHook)new FactionsUuid();
         }
-        Bukkit.getConsoleSender().sendMessage("Successfully hooked "+hookName);
         return (FactionHook) new FactionsSaberMassive();
     }
     public String getFactionTag(Player player) {
@@ -64,4 +61,7 @@ public class FactionHook implements PluginHooks<FactionHook> {
     public String getHookName() {
         return hookName;
     }
+
+    @Override
+    public String getHookPluginName() { return realName; }
 }

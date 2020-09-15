@@ -1,7 +1,7 @@
 name: LunarSandBotRecoded
 version: ${project.version}
 main: me.magas8.LunarSandBot
-depend: [Factions, Vault]
+depend: [Vault]
 commands:
   sandbot:
     description: Shows help menu of this plugin
