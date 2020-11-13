@@ -1,6 +1,7 @@
 package me.magas8.ConfigManager;
 
 import me.magas8.LunarSandBot;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,13 +11,17 @@ import java.util.*;
 
 public class FilesManager {
 
-    private LunarSandBot plugin;
+    private JavaPlugin plugin;
+    private static FilesManager instance;
     private HashMap<String, ConfigFile> filesMap = new HashMap<String, ConfigFile>();
+    public static FilesManager getInstance(JavaPlugin plugin) {
+        return (instance == null) ? (instance = new FilesManager(plugin)) : instance;
+    }
 
     //------------------------------[ Manager Constructors Start ]-----------------------------//
     //We're making the constructors that initializes the files manager.
     //We're initializing the files manager by specifying the plugin.
-    public FilesManager(LunarSandBot plugin) {
+    public FilesManager(JavaPlugin plugin) {
         this.plugin = plugin;
     }
     //-------------------------------[ Manager Constructors End ]------------------------------//
@@ -119,6 +124,7 @@ public class FilesManager {
 
         if(folderPath.equals("default")) {
             folder = new File(plugin.getDataFolder() + "");
+            if(!folder.exists()) return map;
             for(File file : folder.listFiles()) {
                 if(!file.isDirectory()) {
                     ConfigFile confFile = fileSetup(file.getName().replace(".yml", ""));
@@ -129,6 +135,7 @@ public class FilesManager {
         }
         else {
             folder = new File(plugin.getDataFolder() + "/" + folderPath);
+            if(!folder.exists()) return map;
             for(File file : folder.listFiles()) {
                 if(!file.isDirectory()) {
                     ConfigFile confFile = fileSetup(file.getName().replace(".yml", ""), folderPath);

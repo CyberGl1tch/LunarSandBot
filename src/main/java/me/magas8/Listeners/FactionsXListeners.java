@@ -31,7 +31,7 @@ public class FactionsXListeners implements Listener {
         int counter = 0;
         for (Iterator<SandBot> iterator = LunarSandBot.sandBots.iterator(); iterator.hasNext();) {
             SandBot bot = iterator.next();
-            if(bot.getFactionID().equals(String.valueOf((int)event.getFaction().getId()))){
+            if(bot.getFactionID()!=null &&bot.getFactionID().equals(String.valueOf((int)event.getFaction().getId()))){
                 utils.removeBot(bot);
                 ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
                 botItem.setAmount(1);
@@ -54,7 +54,7 @@ public class FactionsXListeners implements Listener {
         int counter = 0;
         for (Iterator<SandBot> iterator = LunarSandBot.sandBots.iterator(); iterator.hasNext();) {
             SandBot bot = iterator.next();
-            if(bot.getFactionID().equals(String.valueOf((int)event.getUnclaimingFaction().getId()))){
+            if(bot.getFactionID()!=null &&bot.getFactionID().equals(String.valueOf((int)event.getUnclaimingFaction().getId()))){
                 utils.removeBot(bot);
                 ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
                 botItem.setAmount(1);
@@ -78,7 +78,7 @@ public class FactionsXListeners implements Listener {
             int counter = 0;
         for (Iterator<SandBot> iterator = LunarSandBot.sandBots.iterator(); iterator.hasNext();) {
             SandBot bot = iterator.next();
-            if(bot.getFactionID().equals(String.valueOf((int)event.getFactionUnClaiming().getId())) && bot.getLocation().getChunk().equals(event.getFLocation().getChunk())){
+            if(bot.getFactionID()!=null &&bot.getFactionID().equals(String.valueOf((int)event.getFactionUnClaiming().getId())) && bot.getLocation().getChunk().equals(event.getFLocation().getChunk())){
                 utils.removeBot(bot);
                 ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
                 botItem.setAmount(1);

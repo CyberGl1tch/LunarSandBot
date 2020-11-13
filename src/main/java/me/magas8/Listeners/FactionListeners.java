@@ -32,7 +32,7 @@ public class FactionListeners implements Listener {
         Player player = event.getPlayer();
         int counter = 0;
             for(SandBot bot:LunarSandBot.sandBots){
-                if(bot.getFactionID().equals(event.getFaction().getId())){
+                if(bot.getFactionID()!=null &&bot.getFactionID().equals(event.getFaction().getId())){
                     utils.removeBot(bot);
                     ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
                     botItem.setAmount(1);
@@ -57,7 +57,7 @@ public class FactionListeners implements Listener {
         int counter = 0;
 
             for(SandBot bot:LunarSandBot.sandBots){
-                if(bot.getFactionID().equals(event.getFaction().getId()) && bot.getLocation().getChunk().equals(event.getLocation().getChunk())){
+                if(bot.getFactionID()!=null && bot.getFactionID().equals(event.getFaction().getId()) && bot.getLocation().getChunk().equals(event.getLocation().getChunk())){
                     utils.removeBot(bot);
                     ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
                     botItem.setAmount(1);
@@ -79,7 +79,7 @@ public class FactionListeners implements Listener {
         Player player = event.getPlayer();
         int counter = 0;
             for(SandBot bot:LunarSandBot.sandBots){
-                if(bot.getFactionID().equals(event.getFaction().getId())){
+                if(bot.getFactionID()!=null &&bot.getFactionID().equals(event.getFaction().getId())){
                     utils.removeBot(bot);
                     ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
                     botItem.setAmount(1);

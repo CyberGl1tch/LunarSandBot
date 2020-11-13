@@ -3,12 +3,13 @@ package me.magas8.ConfigManager;
 import me.magas8.LunarSandBot;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
 
 public class ConfigFile {
 
-    private LunarSandBot plugin;
+    private JavaPlugin plugin;
     private File file;
     private FileConfiguration config;
     private String fileAsName;
@@ -16,7 +17,7 @@ public class ConfigFile {
 
     //----------------------------[ ConfigFiles Constructors Start ]----------------------------//
     //Used to create a config file on the default plugins path.
-    public ConfigFile(LunarSandBot pluginName, String fileName) {
+    public ConfigFile(JavaPlugin pluginName, String fileName) {
         plugin = pluginName;
         file = new File(plugin.getDataFolder(), fileName + ".yml");
         fileAsName = fileName;
@@ -27,7 +28,7 @@ public class ConfigFile {
     }
 
     //Used to create a config file on the specified path.
-    public ConfigFile(LunarSandBot pluginName, String fileName, String folderPathName) {
+    public ConfigFile(JavaPlugin pluginName, String fileName, String folderPathName) {
         plugin = pluginName;
         file = new File(plugin.getDataFolder() + "/" + folderPathName, fileName + ".yml");
         fileAsName = fileName;
@@ -38,7 +39,7 @@ public class ConfigFile {
     }
 
     //Used to create a config file on the specified path(s).
-    public ConfigFile(LunarSandBot pluginName, String fileName, String... folderPathName) {
+    public ConfigFile(JavaPlugin pluginName, String fileName, String... folderPathName) {
         plugin = pluginName;
         String path = "default";
         for(String s : folderPathName) {

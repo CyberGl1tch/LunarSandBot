@@ -144,6 +144,7 @@ public class utils {
         return factionHook.getFactionId(player);
     }
 
+
     public static Integer getFactionAliveBotsCount(String factionID){
         Integer count = 0;
         for(SandBot bot: LunarSandBot.sandBots){
@@ -163,6 +164,7 @@ public class utils {
 
 
     public static void saveDataOfSandbots(FilesManager manager){
+        if(manager.getAllFiles("default/Data").values().size()<1) return;
         FileConfiguration data = manager.getFile("default/Data/sandbots.yml").getConfig();
         for(SandBot bot: LunarSandBot.sandBots){
             data.set("SandBots."+bot.getSandbotUUID()+".sandBotUuid",bot.getSandbotUUID().toString());
@@ -211,7 +213,7 @@ public class utils {
                 );
 
                 LunarSandBot.sandBots.add(bot);
-                bot.getLocation().getChunk().load();
+                bot.getLocation().getWorld().loadChunk(bot.getLocation().getChunk());
                 ConcurrentHashMap<GuiTypes, MenuManager> menus = new ConcurrentHashMap<>();
                 menus.put(GuiTypes.REMOVEGUI,new RemoveGUI(plugin,bot));
                 menus.put(GuiTypes.FACTIONGUI,new FactionManageGui(plugin));
