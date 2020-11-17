@@ -1,37 +1,88 @@
-package me.magas8.Listeners;
+package me.magas8.Hooks.FactionsHooks;
 
+import com.massivecraft.factions.*;
+
+
+import com.massivecraft.factions.event.FactionDisbandEvent;
+import com.massivecraft.factions.event.LandUnclaimAllEvent;
+import com.massivecraft.factions.event.LandUnclaimEvent;
+import com.massivecraft.factions.struct.Role;
 import me.magas8.Hooks.FactionHook;
 import me.magas8.LunarSandBot;
 import me.magas8.Managers.ItemBuilder;
 import me.magas8.Managers.SandBot;
 import me.magas8.Utils.utils;
-import net.prosavage.factionsx.event.FactionDisbandEvent;
-import net.prosavage.factionsx.event.FactionUnClaimAllEvent;
-import net.prosavage.factionsx.event.FactionUnClaimEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Iterator;
-
-public class FactionsXListeners implements Listener {
+public class SaberFactions extends FactionHook implements Listener {
     private LunarSandBot plugin;
-    public FactionsXListeners(LunarSandBot plugin){
+    public SaberFactions(LunarSandBot plugin){
         this.plugin=plugin;
-        if(!FactionHook.hookName.equalsIgnoreCase("FactionsX")) return;
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
+    @Override
+    public Boolean isFactionAdmin(Player player) {
+        if(FPlayers.getInstance().getByPlayer(player).getRole().equals(Role.valueOf("COLEADER")) || FPlayers.getInstance().getByPlayer(player).getRole().equals(Role.valueOf("MODERATOR")) || FPlayers.getInstance().getByPlayer(player).getRole().equals(Role.valueOf("LEADER"))){
+            return true;
+        }
+        return false;
+    }
+    @Override
+    public String getFactionTag(Player player) {
+        FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
+        if (fPlayer.getFaction() == null)
+            return null;
+        return fPlayer.getFaction().getTag();
+    }
+    @Override
+    public String getFactionTag(OfflinePlayer player) {
+        FPlayer fPlayer = FPlayers.getInstance().getByOfflinePlayer(player);
+        if (fPlayer.getFaction() == null)
+            return null;
+        return fPlayer.getFaction().getTag();
+    }
 
+    @Override
+    public String getFactionTagFromId(String id) {
+        try {
+            return Factions.getInstance().getFactionById(id).getTag();
+        } catch (Exception exception) {
+            return null;
+        }
+    }
+
+    @Override
+    public String getFactionId(Player player) {
+        FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
+        if (fPlayer.getFaction() == null)
+            return null;
+        if (!fPlayer.getFaction().isNormal())
+            return null;
+        return fPlayer.getFaction().getId();
+    }
+
+    @Override
+    public String getFactionIdAtLocation(Location loc) {
+        FLocation floc = new FLocation(loc);
+        Faction locfaction = Board.getInstance().getFactionAt(floc);
+        if(locfaction==null) return null;
+        if(!locfaction.isNormal()) return null;
+        return locfaction.getId();
+    }
     @EventHandler
     public void onFactionDisband(FactionDisbandEvent event) {
-        Player player = event.getFPlayer().getPlayer();
+        if (event.isCancelled()) return;
+        Player player = event.getPlayer();
         int counter = 0;
-        for (Iterator<SandBot> iterator = LunarSandBot.sandBots.iterator(); iterator.hasNext();) {
-            SandBot bot = iterator.next();
-            if(bot.getFactionID()!=null &&bot.getFactionID().equals(String.valueOf((int)event.getFaction().getId()))){
+        for(SandBot bot: LunarSandBot.sandBots){
+            if(bot.getFactionID()!=null &&bot.getFactionID().equals(event.getFaction().getId())){
                 utils.removeBot(bot);
                 ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
                 botItem.setAmount(1);
@@ -45,16 +96,18 @@ public class FactionsXListeners implements Listener {
             }
         }
         player.sendMessage(utils.color(plugin.getConfig().getString("f-disband").replace("%amount%",String.valueOf(counter))));
+
+
     }
 
     @EventHandler
-    public void onFactionUnclaimEvent(FactionUnClaimAllEvent event){
+    public void onFactionUnclaimEvent(LandUnclaimEvent event){
         if (event.isCancelled()) return;
-        Player player = event.getFplayer().getPlayer();
+        Player player = event.getPlayer();
         int counter = 0;
-        for (Iterator<SandBot> iterator = LunarSandBot.sandBots.iterator(); iterator.hasNext();) {
-            SandBot bot = iterator.next();
-            if(bot.getFactionID()!=null &&bot.getFactionID().equals(String.valueOf((int)event.getUnclaimingFaction().getId()))){
+
+        for(SandBot bot:LunarSandBot.sandBots){
+            if(bot.getFactionID()!=null && bot.getFactionID().equals(event.getFaction().getId()) && bot.getLocation().getChunk().equals(event.getLocation().getChunk())){
                 utils.removeBot(bot);
                 ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
                 botItem.setAmount(1);
@@ -71,14 +124,12 @@ public class FactionsXListeners implements Listener {
 
     }
     @EventHandler
-    public void onFactionUnclaimEvent(FactionUnClaimEvent event){
+    public void onFactionUnclaimEvent(LandUnclaimAllEvent event){
         if (event.isCancelled()) return;
-        Player player = event.getFplayer().getPlayer();
-        Bukkit.getScheduler().runTask(plugin,()->{
-            int counter = 0;
-        for (Iterator<SandBot> iterator = LunarSandBot.sandBots.iterator(); iterator.hasNext();) {
-            SandBot bot = iterator.next();
-            if(bot.getFactionID()!=null &&bot.getFactionID().equals(String.valueOf((int)event.getFactionUnClaiming().getId())) && bot.getLocation().getChunk().equals(event.getFLocation().getChunk())){
+        Player player = event.getPlayer();
+        int counter = 0;
+        for(SandBot bot:LunarSandBot.sandBots){
+            if(bot.getFactionID()!=null &&bot.getFactionID().equals(event.getFaction().getId())){
                 utils.removeBot(bot);
                 ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
                 botItem.setAmount(1);
@@ -91,8 +142,7 @@ public class FactionsXListeners implements Listener {
                 counter++;
             }
         }
-            player.sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
-        });
+        player.sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
 
     }
 

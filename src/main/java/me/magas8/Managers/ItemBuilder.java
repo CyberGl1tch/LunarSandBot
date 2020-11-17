@@ -74,6 +74,17 @@ public class ItemBuilder {
         is.setItemMeta(im);
         return this;
     }
+    public ItemBuilder setColoredPagesLore(List<String> lore, String page,String maxPage) {
+        List<String> coloredLore = new ArrayList<String>();
+
+        for(String tmp: lore){
+            coloredLore.add(utils.color(tmp.replace("%page%",page).replace("%maxPage%",maxPage)));
+        }
+        ItemMeta im = is.getItemMeta();
+        im.setLore(coloredLore);
+        is.setItemMeta(im);
+        return this;
+    }
     public ItemBuilder setColoredName(String name){
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(utils.color(name));

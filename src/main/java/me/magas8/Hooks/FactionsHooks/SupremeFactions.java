@@ -1,14 +1,17 @@
 package me.magas8.Hooks.FactionsHooks;
 
+import com.massivecraft.factions.*;
+
+
 import com.massivecraft.factions.event.FactionDisbandEvent;
 import com.massivecraft.factions.event.LandUnclaimAllEvent;
 import com.massivecraft.factions.event.LandUnclaimEvent;
+import com.massivecraft.factions.struct.Role;
+import me.magas8.Hooks.FactionHook;
 import me.magas8.LunarSandBot;
 import me.magas8.Managers.ItemBuilder;
 import me.magas8.Managers.SandBot;
 import me.magas8.Utils.utils;
-import me.magas8.library.FactionsUUID;
-import me.magas8.Hooks.FactionHook;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,41 +21,61 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-public class FactionsUuid extends FactionHook implements Listener {
+public class SupremeFactions extends FactionHook implements Listener {
     private LunarSandBot plugin;
-    public FactionsUuid(LunarSandBot plugin){
+    public SupremeFactions(LunarSandBot plugin){
         this.plugin=plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
+
     @Override
     public Boolean isFactionAdmin(Player player) {
-        return new FactionsUUID().isFactionAdmin(player);
+        if(FPlayers.getInstance().getByPlayer(player).getRole().equals(Role.valueOf("COLEADER")) || FPlayers.getInstance().getByPlayer(player).getRole().equals(Role.valueOf("MODERATOR")) || FPlayers.getInstance().getByPlayer(player).getRole().equals(Role.valueOf("ADMIN"))){
+            return true;
+        }
+        return false;
     }
-
-
     @Override
     public String getFactionTag(Player player) {
-        return new FactionsUUID().getFactionTag(player);
+        FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
+        if (fPlayer.getFaction() == null)
+            return null;
+        return fPlayer.getFaction().getTag();
     }
     @Override
     public String getFactionTag(OfflinePlayer player) {
-        return new FactionsUUID().getFactionTag(player);
+        FPlayer fPlayer = FPlayers.getInstance().getByOfflinePlayer(player);
+        if (fPlayer.getFaction() == null)
+            return null;
+        return fPlayer.getFaction().getTag();
     }
 
     @Override
     public String getFactionTagFromId(String id) {
-        return new FactionsUUID().getFactionTagFromId(id);
+        try {
+            return Factions.getInstance().getFactionById(id).getTag();
+        } catch (Exception exception) {
+            return null;
+        }
     }
 
     @Override
     public String getFactionId(Player player) {
-        return new FactionsUUID().getFactionId(player);
+        FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
+        if (fPlayer.getFaction() == null)
+            return null;
+        if (!fPlayer.getFaction().isNormal())
+            return null;
+        return fPlayer.getFaction().getId();
     }
-
 
     @Override
     public String getFactionIdAtLocation(Location loc) {
-        return new FactionsUUID().getFactionIdAtLocation(loc);
+        FLocation floc = new FLocation(loc);
+        Faction locfaction = Board.getInstance().getFactionAt(floc);
+        if(locfaction==null) return null;
+        if(!locfaction.isNormal()) return null;
+        return locfaction.getId();
     }
     @EventHandler
     public void onFactionDisband(FactionDisbandEvent event) {

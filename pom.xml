@@ -6,7 +6,7 @@
 
     <groupId>me.magas8</groupId>
     <artifactId>LunarSandBot</artifactId>
-    <version>1.7</version>
+    <version>1.9</version>
     <packaging>jar</packaging>
 
     <name>LunarSandBotRecoded</name>
@@ -60,6 +60,10 @@
     </build>
 
     <repositories>
+            <repository>
+                <id>my-local-repo</id>
+                <url>file://${project.basedir}/dependencies</url>
+            </repository>
         <repository>
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
@@ -113,11 +117,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-        <groupId>org.bstats</groupId>
-        <artifactId>bstats-bukkit</artifactId>
-        <version>1.7</version>
-        <scope>compile</scope>
-    </dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>1.7</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>fr.minuskube.inv</groupId>
             <artifactId>smart-invs</artifactId>
@@ -131,33 +135,38 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.SaberLLC</groupId>
-            <artifactId>Saber-Factions</artifactId>
-            <version>2.3.3-STABLE</version>
+            <groupId>me.lucko</groupId>
+            <artifactId>helper</artifactId>
+            <version>5.6.5</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.massivecraft</groupId>
+            <groupId>com.massivecraft.factions.FactionsPlugin</groupId>
+            <artifactId>SaberFactions</artifactId>
+            <version>1.6.9.5-2.4.5-RC</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/dependencies/SaberFactions.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.massivecraft.factions.Factions</groupId>
+            <artifactId>FactionsMassive</artifactId>
+            <version>2.14.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/dependencies/Factions.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.massivecraft.massivecore.MassiveCore</groupId>
+            <artifactId>MassiveCore</artifactId>
+            <version>2.14.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/dependencies/MassiveCore.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.massivecraft.factions.FactionsPlugin</groupId>
             <artifactId>Factions</artifactId>
-            <version>1.6.9.5-U0.5.16</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.cryptomorin</groupId>
-            <artifactId>XSeries</artifactId>
-            <version>6.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>me.magas8.SupremeApiHook</groupId>
-            <artifactId>SupremeApiHook</artifactId>
-            <version>1.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.prosavage.factionsx</groupId>
-            <artifactId>FactionsX</artifactId>
-            <version>0.3-PATREON</version>
-            <scope>provided</scope>
+            <version>1.6.9.5-U0.5.18-b240</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/dependencies/FactionsUUID.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>Fuuid</groupId>
@@ -165,10 +174,16 @@
             <version>1.1</version>
         </dependency>
         <dependency>
-            <groupId>net.prosavage.factionsx</groupId>
+            <groupId>com.github.cryptomorin</groupId>
+            <artifactId>XSeries</artifactId>
+            <version>7.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.prosavage.factionsx.FactionsX</groupId>
             <artifactId>FactionsX</artifactId>
-            <version>1.0.8-RC</version>
-            <scope>provided</scope>
+            <version>0.6-PATREON</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/dependencies/FactionsX-0.6-PATREON.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

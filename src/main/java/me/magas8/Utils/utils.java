@@ -67,6 +67,7 @@ public class utils {
             return;
         }
         for(SandBot bot: LunarSandBot.sandBots){
+            if(bot.getLocation() == null || bot.getLocation().getWorld() == null) continue;
             if(bot.getLocation().getWorld().equals(loc.getWorld())) {
                 if (bot.getLocation().distance(loc) <= 2*plugin.getConfig().getInt("bot-fill-radius") && factionHook.getFactionIdAtLocation(loc)!=null && factionHook.getFactionIdAtLocation(bot.getLocation())!=null &&factionHook.getFactionIdAtLocation(loc).equals(factionHook.getFactionIdAtLocation(bot.getLocation()))) {
                     player.sendMessage(utils.color(plugin.getConfig().getString("bot-close-to-each-other").replace("%distance%", String.valueOf(2*plugin.getConfig().getInt("bot-fill-radius") - (int) bot.getLocation().distance(loc)))));
@@ -213,7 +214,7 @@ public class utils {
                 );
 
                 LunarSandBot.sandBots.add(bot);
-                bot.getLocation().getWorld().loadChunk(bot.getLocation().getChunk());
+                if(bot.getLocation() !=null && bot.getLocation().getWorld() !=null) bot.getLocation().getWorld().loadChunk(bot.getLocation().getChunk());
                 ConcurrentHashMap<GuiTypes, MenuManager> menus = new ConcurrentHashMap<>();
                 menus.put(GuiTypes.REMOVEGUI,new RemoveGUI(plugin,bot));
                 menus.put(GuiTypes.FACTIONGUI,new FactionManageGui(plugin));
@@ -229,13 +230,19 @@ public class utils {
 
 
     public static String locationToString(Location location){
+        if(location == null || location.getWorld() == null) return "Unknown:0:0:0";
         String loc = location.getX()+":"+location.getY()+":"+location.getZ()+":"+location.getWorld().getName();
         return loc;
     }
 
 
     public static Location stringToLocation(String string){
-        Location loc = new Location(Bukkit.getWorld(string.split(":")[3]),Double.parseDouble(string.split(":")[0]),Double.parseDouble(string.split(":")[1]),Double.parseDouble(string.split(":")[2]));
+        Location loc;
+        try {
+             loc = new Location(Bukkit.getWorld(string.split(":")[3]), Double.parseDouble(string.split(":")[0]), Double.parseDouble(string.split(":")[1]), Double.parseDouble(string.split(":")[2]));
+        }catch (Exception e){
+            return null;
+        }
         return loc;
     }
 
@@ -318,5 +325,7 @@ public class utils {
     public static boolean getArmorAnimateBoolean(){
         return plugin.getConfig().getBoolean("bot-animate-armor");
     }
-
+    public static void logToServer(String text,Boolean prefix){
+        Bukkit.getServer().getConsoleSender().sendMessage((prefix ? "[LunarSandBot] " : "") + text);
+    }
 }

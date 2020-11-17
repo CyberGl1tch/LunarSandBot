@@ -1,14 +1,23 @@
 package me.magas8.Hooks.FactionsHooks;
 
+
+
+
+import com.massivecraft.factions.FLocation;
+import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.Board;
+import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.event.FactionDisbandEvent;
 import com.massivecraft.factions.event.LandUnclaimAllEvent;
 import com.massivecraft.factions.event.LandUnclaimEvent;
+import com.massivecraft.factions.entity.MPlayer;
+
+import me.magas8.Hooks.FactionHook;
 import me.magas8.LunarSandBot;
 import me.magas8.Managers.ItemBuilder;
 import me.magas8.Managers.SandBot;
 import me.magas8.Utils.utils;
-import me.magas8.library.FactionsUUID;
-import me.magas8.Hooks.FactionHook;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,41 +27,60 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-public class FactionsUuid extends FactionHook implements Listener {
+public class MassiveCoreFactions extends FactionHook implements Listener {
     private LunarSandBot plugin;
-    public FactionsUuid(LunarSandBot plugin){
+    public MassiveCoreFactions(LunarSandBot plugin){
         this.plugin=plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
     @Override
     public Boolean isFactionAdmin(Player player) {
-        return new FactionsUUID().isFactionAdmin(player);
+        if(MPlayer.get(player).getRole().equals(Rel.OFFICER) || MPlayer.get(player).getRole().equals(Rel.LEADER)){
+            return true;
+        }
+        return false;
     }
-
-
     @Override
     public String getFactionTag(Player player) {
-        return new FactionsUUID().getFactionTag(player);
+        MPlayer fPlayer = MPlayer.get(player);
+        if (fPlayer.getFaction() == null)
+            return null;
+        return fPlayer.getFaction().getName();
     }
     @Override
     public String getFactionTag(OfflinePlayer player) {
-        return new FactionsUUID().getFactionTag(player);
+        MPlayer fPlayer = MPlayer.get(player);
+        if (fPlayer.getFaction() == null)
+            return null;
+        return fPlayer.getFaction().getName();
     }
 
     @Override
     public String getFactionTagFromId(String id) {
-        return new FactionsUUID().getFactionTagFromId(id);
+        try {
+            return Factions.getInstance().getFactionById(id).getTag();
+        } catch (Exception exception) {
+            return null;
+        }
     }
 
     @Override
     public String getFactionId(Player player) {
-        return new FactionsUUID().getFactionId(player);
+        MPlayer fPlayer = MPlayer.get(player);
+        if (fPlayer.getFaction() == null)
+            return null;
+        if (!fPlayer.getFaction().isNormal())
+            return null;
+        return fPlayer.getFaction().getId();
     }
-
 
     @Override
     public String getFactionIdAtLocation(Location loc) {
-        return new FactionsUUID().getFactionIdAtLocation(loc);
+        FLocation floc = new FLocation(loc);
+        Faction locfaction = Board.getInstance().getFactionAt(floc);
+        if(locfaction==null) return null;
+        if(!locfaction.isNormal()) return null;
+        return locfaction.getId();
     }
     @EventHandler
     public void onFactionDisband(FactionDisbandEvent event) {
@@ -123,4 +151,5 @@ public class FactionsUuid extends FactionHook implements Listener {
         player.sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
 
     }
+
 }

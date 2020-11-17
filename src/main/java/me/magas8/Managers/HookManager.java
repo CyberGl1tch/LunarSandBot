@@ -16,7 +16,7 @@ public class HookManager {
         hook(new FactionHook());
     }
     private void hook(PluginHooks hook){
-        PluginHooks hooked = (PluginHooks) hook.setup();
+        PluginHooks hooked = (PluginHooks) hook.setup(plugin);
         if(this.plugin.getServer().getPluginManager().getPlugin(hook.getHookPluginName()) == null){
             this.plugin.getServer().getLogger().log(Level.WARNING,"[SandBot] Cant find any "+hook.getHookName()+" hook!");
             Bukkit.getScheduler().runTask(plugin,()->{

@@ -119,7 +119,6 @@ fall-speed: 1
 sand-spawn-speed: 5 #In ticks 20ticks = 1 Second
 sand-cost: 10
 money-to-add: 1000
-#You can set this number whatever you want but only 7 sandbots will be displayed in /f sandbots for now! will be updated in next version
 faction-bot-limit: 2
 ##################################################
 #                Sandbot Animations              #
@@ -160,9 +159,19 @@ confirm-gui-glass-fill: MAGENTA_STAINED_GLASS_PANE
 #           SandBot sandbots Gui Settings        #
 ##################################################
 sandbots-gui-title: "&5&lAvailable Sandbots"
-sandbots-gui-glass-from: PURPLE_STAINED_GLASS_PANE
-sandbots-gui-glass-to: LIME_STAINED_GLASS_PANE
-sandbots-gui-glass-fill: MAGENTA_STAINED_GLASS_PANE
+sandbots-gui-glass-fill: LIME_STAINED_GLASS_PANE
+
+sandbots-faction-gui-next-page-item: ARROW
+sandbots-faction-gui-next-page-name: "&2&lNext Page &e(%page%/%maxPage%)"
+sandbots-faction-gui-next-page-lore:
+  - "&7Click here to move on the next page!"
+sandbots-faction-gui-next-page-slot: 24
+
+sandbots-faction-gui-previous-page-item: ARROW
+sandbots-faction-gui-previous-page-name: "&2&lPrevious Page &e(%page%/%maxPage%)"
+sandbots-faction-gui-previous-page-lore:
+  - "&7Click here to move on the previous page!"
+sandbots-faction-gui-previous-page-slot: 20
 
 
 ##################################################

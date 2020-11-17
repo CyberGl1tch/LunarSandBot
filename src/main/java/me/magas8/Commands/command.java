@@ -3,6 +3,7 @@ package me.magas8.Commands;
 
 import me.magas8.LunarSandBot;
 import me.magas8.Managers.ItemBuilder;
+import me.magas8.Runnables.BlockSpawn;
 import me.magas8.Utils.Updater;
 import me.magas8.Utils.utils;
 import org.bukkit.Bukkit;
@@ -41,6 +42,8 @@ public class command implements CommandExecutor {
                             LunarSandBot.sandBots.clear();
                             LunarSandBot.botGuis.clear();
                             utils.loadDataOfSandbots(plugin.getManager());
+                            if(LunarSandBot.spawnSandBlocks!=null) LunarSandBot.spawnSandBlocks.cancel();
+                            LunarSandBot.spawnSandBlocks = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> Bukkit.getScheduler().runTask(plugin, new BlockSpawn(plugin)), 0, plugin.getConfig().getInt("sand-spawn-speed"));
                             sender.sendMessage(utils.color(plugin.getConfig().getString("command-reload")));
                             return true;
                         }else{
