@@ -3,16 +3,13 @@ package me.magas8.Hooks.FactionsHooks;
 
 
 
-import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.Board;
+import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.Rel;
-import com.massivecraft.factions.event.FactionDisbandEvent;
-import com.massivecraft.factions.event.LandUnclaimAllEvent;
-import com.massivecraft.factions.event.LandUnclaimEvent;
+import com.massivecraft.factions.entity.BoardColl;
+import com.massivecraft.factions.event.*;
 import com.massivecraft.factions.entity.MPlayer;
-
+import com.massivecraft.massivecore.ps.PS;
 import me.magas8.Hooks.FactionHook;
 import me.magas8.LunarSandBot;
 import me.magas8.Managers.ItemBuilder;
@@ -76,79 +73,56 @@ public class MassiveCoreFactions extends FactionHook implements Listener {
 
     @Override
     public String getFactionIdAtLocation(Location loc) {
-        FLocation floc = new FLocation(loc);
-        Faction locfaction = Board.getInstance().getFactionAt(floc);
+        Faction locfaction = BoardColl.get().getFactionAt(PS.valueOf(loc));
         if(locfaction==null) return null;
         if(!locfaction.isNormal()) return null;
         return locfaction.getId();
     }
     @EventHandler
-    public void onFactionDisband(FactionDisbandEvent event) {
+    public void onFactionDisband(EventFactionsDisband event) {
         if (event.isCancelled()) return;
-        Player player = event.getPlayer();
+        MPlayer player = event.getMPlayer();
         int counter = 0;
         for(SandBot bot: LunarSandBot.sandBots){
             if(bot.getFactionID()!=null &&bot.getFactionID().equals(event.getFaction().getId())){
                 utils.removeBot(bot);
                 ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
                 botItem.setAmount(1);
-                player.getInventory().addItem(botItem);
+                player.getPlayer().getInventory().addItem(botItem);
                 Double cash = bot.getBalance();
                 if(cash > 0){
-                    LunarSandBot.econ.depositPlayer(player,cash);
-                    player.sendMessage(utils.color(plugin.getConfig().getString("cash-back").replace("%amount%",cash.toString())));
+                    LunarSandBot.econ.depositPlayer(player.getPlayer(),cash);
+                    player.getPlayer().sendMessage(utils.color(plugin.getConfig().getString("cash-back").replace("%amount%",cash.toString())));
                 }
                 counter++;
             }
         }
-        player.sendMessage(utils.color(plugin.getConfig().getString("f-disband").replace("%amount%",String.valueOf(counter))));
+        if(counter >0)  player.getPlayer().sendMessage(utils.color(plugin.getConfig().getString("f-disband").replace("%amount%",String.valueOf(counter))));
 
 
     }
 
     @EventHandler
-    public void onFactionUnclaimEvent(LandUnclaimEvent event){
+    public void onFactionUnclaimEvent(EventFactionsChunksChange event){
         if (event.isCancelled()) return;
-        Player player = event.getPlayer();
+        MPlayer player = event.getMPlayer();
         int counter = 0;
 
         for(SandBot bot:LunarSandBot.sandBots){
-            if(bot.getFactionID()!=null && bot.getFactionID().equals(event.getFaction().getId()) && bot.getLocation().getChunk().equals(event.getLocation().getChunk())){
+            if(bot.getFactionID()!=null && bot.getFactionID().equals(event.getMPlayer().getFaction().getId()) && event.getChunkType().get(PS.valueOf(bot.getLocation().getChunk()))!=null && ( event.getChunkType().get(PS.valueOf(bot.getLocation().getChunk())).equals(EventFactionsChunkChangeType.SELL) || event.getChunkType().get(PS.valueOf(bot.getLocation().getChunk())).equals(EventFactionsChunkChangeType.CONQUER)) && event.getChunks().contains(PS.valueOf(bot.getLocation().getChunk()))){
                 utils.removeBot(bot);
                 ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
                 botItem.setAmount(1);
-                player.getInventory().addItem(botItem);
+                player.getPlayer().getInventory().addItem(botItem);
                 Double cash = bot.getBalance();
                 if(cash > 0){
-                    LunarSandBot.econ.depositPlayer(player,cash);
-                    player.sendMessage(utils.color(plugin.getConfig().getString("cash-back").replace("%amount%",cash.toString())));
+                    LunarSandBot.econ.depositPlayer(player.getPlayer(),cash);
+                    player.getPlayer().sendMessage(utils.color(plugin.getConfig().getString("cash-back").replace("%amount%",cash.toString())));
                 }
                 counter++;
             }
         }
-        player.sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
-
-    }
-    @EventHandler
-    public void onFactionUnclaimEvent(LandUnclaimAllEvent event){
-        if (event.isCancelled()) return;
-        Player player = event.getPlayer();
-        int counter = 0;
-        for(SandBot bot:LunarSandBot.sandBots){
-            if(bot.getFactionID()!=null &&bot.getFactionID().equals(event.getFaction().getId())){
-                utils.removeBot(bot);
-                ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
-                botItem.setAmount(1);
-                player.getInventory().addItem(botItem);
-                Double cash = bot.getBalance();
-                if(cash > 0){
-                    LunarSandBot.econ.depositPlayer(player,cash);
-                    player.sendMessage(utils.color(plugin.getConfig().getString("cash-back").replace("%amount%",cash.toString())));
-                }
-                counter++;
-            }
-        }
-        player.sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
+        if(counter >0) player.getPlayer().sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
 
     }
 

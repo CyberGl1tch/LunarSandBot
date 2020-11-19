@@ -73,7 +73,7 @@ public class FactionsUuid extends FactionHook implements Listener {
                 counter++;
             }
         }
-        player.sendMessage(utils.color(plugin.getConfig().getString("f-disband").replace("%amount%",String.valueOf(counter))));
+        if(counter >0) player.sendMessage(utils.color(plugin.getConfig().getString("f-disband").replace("%amount%",String.valueOf(counter))));
 
 
     }
@@ -98,7 +98,7 @@ public class FactionsUuid extends FactionHook implements Listener {
                 counter++;
             }
         }
-        player.sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
+        if(counter >0) player.sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
 
     }
     @EventHandler
@@ -120,7 +120,7 @@ public class FactionsUuid extends FactionHook implements Listener {
                 counter++;
             }
         }
-        player.sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
+        if(counter >0) player.sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
 
     }
 }
