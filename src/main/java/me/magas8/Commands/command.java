@@ -37,8 +37,8 @@ public class command implements CommandExecutor {
                     if(args[0].equalsIgnoreCase("reload")){
                         if(sender.hasPermission("sandbot.reload")){
                             plugin.reloadConfig();
-                            utils.setupConfigFiles(plugin.getManager());
                             utils.saveDataOfSandbots(plugin.getManager());
+                            utils.setupConfigFiles(plugin.getManager());
                             LunarSandBot.sandBots.clear();
                             LunarSandBot.botGuis.clear();
                             utils.loadDataOfSandbots(plugin.getManager());

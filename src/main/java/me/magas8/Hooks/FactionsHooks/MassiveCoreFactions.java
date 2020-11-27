@@ -83,22 +83,24 @@ public class MassiveCoreFactions extends FactionHook implements Listener {
         if (event.isCancelled()) return;
         MPlayer player = event.getMPlayer();
         int counter = 0;
+        double cash = 0;
         for(SandBot bot: LunarSandBot.sandBots){
             if(bot.getFactionID()!=null &&bot.getFactionID().equals(event.getFaction().getId())){
                 utils.removeBot(bot);
-                ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
-                botItem.setAmount(1);
-                player.getPlayer().getInventory().addItem(botItem);
-                Double cash = bot.getBalance();
-                if(cash > 0){
-                    LunarSandBot.econ.depositPlayer(player.getPlayer(),cash);
-                    player.getPlayer().sendMessage(utils.color(plugin.getConfig().getString("cash-back").replace("%amount%",cash.toString())));
-                }
+                cash += bot.getBalance();
                 counter++;
             }
         }
-        if(counter >0)  player.getPlayer().sendMessage(utils.color(plugin.getConfig().getString("f-disband").replace("%amount%",String.valueOf(counter))));
-
+        if(counter >0 && player!=null){
+            player.getPlayer().sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
+            ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
+            botItem.setAmount(counter);
+            player.getPlayer().getInventory().addItem(botItem);
+        }
+        if(cash > 0 && player!=null){
+            LunarSandBot.econ.depositPlayer(player.getPlayer(),cash);
+            player.getPlayer().getPlayer().sendMessage(utils.color(plugin.getConfig().getString("cash-back").replace("%amount%",String.valueOf(cash))));
+        }
 
     }
 
@@ -107,23 +109,25 @@ public class MassiveCoreFactions extends FactionHook implements Listener {
         if (event.isCancelled()) return;
         MPlayer player = event.getMPlayer();
         int counter = 0;
+        double cash = 0;
 
         for(SandBot bot:LunarSandBot.sandBots){
             if(bot.getFactionID()!=null && bot.getFactionID().equals(event.getMPlayer().getFaction().getId()) && event.getChunkType().get(PS.valueOf(bot.getLocation().getChunk()))!=null && ( event.getChunkType().get(PS.valueOf(bot.getLocation().getChunk())).equals(EventFactionsChunkChangeType.SELL) || event.getChunkType().get(PS.valueOf(bot.getLocation().getChunk())).equals(EventFactionsChunkChangeType.CONQUER)) && event.getChunks().contains(PS.valueOf(bot.getLocation().getChunk()))){
                 utils.removeBot(bot);
-                ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
-                botItem.setAmount(1);
-                player.getPlayer().getInventory().addItem(botItem);
-                Double cash = bot.getBalance();
-                if(cash > 0){
-                    LunarSandBot.econ.depositPlayer(player.getPlayer(),cash);
-                    player.getPlayer().sendMessage(utils.color(plugin.getConfig().getString("cash-back").replace("%amount%",cash.toString())));
-                }
+                cash+=bot.getBalance();
                 counter++;
             }
         }
-        if(counter >0) player.getPlayer().sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
-
+        if(counter >0 && player!=null){
+            player.getPlayer().sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
+            ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
+            botItem.setAmount(counter);
+            player.getPlayer().getInventory().addItem(botItem);
+        }
+        if(cash > 0 && player!=null){
+            LunarSandBot.econ.depositPlayer(player.getPlayer(),cash);
+            player.getPlayer().sendMessage(utils.color(plugin.getConfig().getString("cash-back").replace("%amount%",String.valueOf(cash))));
+        }
     }
 
 }

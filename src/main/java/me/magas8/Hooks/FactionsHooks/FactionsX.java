@@ -84,22 +84,25 @@ public class FactionsX extends FactionHook implements Listener {
     public void onFactionDisband(FactionDisbandEvent event) {
         Player player = event.getFPlayer().getPlayer();
         int counter = 0;
+        double cash = 0;
         for (Iterator<SandBot> iterator = LunarSandBot.sandBots.iterator(); iterator.hasNext();) {
             SandBot bot = iterator.next();
             if(bot.getFactionID()!=null &&bot.getFactionID().equals(String.valueOf((int)event.getFaction().getId()))){
                 utils.removeBot(bot);
-                ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
-                botItem.setAmount(1);
-                player.getInventory().addItem(botItem);
-                Double cash = bot.getBalance();
-                if(cash > 0){
-                    LunarSandBot.econ.depositPlayer(player,cash);
-                    player.sendMessage(utils.color(plugin.getConfig().getString("cash-back").replace("%amount%",cash.toString())));
-                }
+                cash+= bot.getBalance();
                 counter++;
             }
         }
-        player.sendMessage(utils.color(plugin.getConfig().getString("f-disband").replace("%amount%",String.valueOf(counter))));
+        if(counter >0 && player!=null){
+            player.sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
+            ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
+            botItem.setAmount(counter);
+            player.getInventory().addItem(botItem);
+        }
+        if(cash > 0 && player!=null){
+            LunarSandBot.econ.depositPlayer(player,cash);
+            player.sendMessage(utils.color(plugin.getConfig().getString("cash-back").replace("%amount%",String.valueOf(cash))));
+        }
     }
 
     @EventHandler
@@ -107,23 +110,26 @@ public class FactionsX extends FactionHook implements Listener {
         if (event.isCancelled()) return;
         Player player = event.getFplayer().getPlayer();
         int counter = 0;
+        double cash = 0;
         for (Iterator<SandBot> iterator = LunarSandBot.sandBots.iterator(); iterator.hasNext();) {
             SandBot bot = iterator.next();
             if(bot.getFactionID()!=null &&bot.getFactionID().equals(String.valueOf((int)event.getUnclaimingFaction().getId()))){
                 utils.removeBot(bot);
-                ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
-                botItem.setAmount(1);
-                player.getInventory().addItem(botItem);
-                Double cash = bot.getBalance();
-                if(cash > 0){
-                    LunarSandBot.econ.depositPlayer(player,cash);
-                    player.sendMessage(utils.color(plugin.getConfig().getString("cash-back").replace("%amount%",cash.toString())));
-                }
+                cash+= bot.getBalance();
+
                 counter++;
             }
         }
-        player.sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
-
+        if(counter >0 && player!=null){
+            player.sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
+            ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
+            botItem.setAmount(counter);
+            player.getInventory().addItem(botItem);
+        }
+        if(cash > 0 && player!=null){
+            LunarSandBot.econ.depositPlayer(player,cash);
+            player.sendMessage(utils.color(plugin.getConfig().getString("cash-back").replace("%amount%",String.valueOf(cash))));
+        }
     }
     @EventHandler
     public void onFactionUnclaimEvent(FactionUnClaimEvent event){
@@ -131,22 +137,26 @@ public class FactionsX extends FactionHook implements Listener {
         Player player = event.getFplayer().getPlayer();
         Bukkit.getScheduler().runTask(plugin,()->{
             int counter = 0;
+            double cash = 0;
             for (Iterator<SandBot> iterator = LunarSandBot.sandBots.iterator(); iterator.hasNext();) {
                 SandBot bot = iterator.next();
                 if(bot.getFactionID()!=null &&bot.getFactionID().equals(String.valueOf((int)event.getFactionUnClaiming().getId())) && bot.getLocation().getChunk().equals(event.getFLocation().getChunk())){
                     utils.removeBot(bot);
-                    ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
-                    botItem.setAmount(1);
-                    player.getInventory().addItem(botItem);
-                    Double cash = bot.getBalance();
-                    if(cash > 0){
-                        LunarSandBot.econ.depositPlayer(player,cash);
-                        player.sendMessage(utils.color(plugin.getConfig().getString("cash-back").replace("%amount%",cash.toString())));
-                    }
+                    cash+= bot.getBalance();
                     counter++;
                 }
             }
-            player.sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
+            if(counter >0 && player!=null){
+                player.sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
+                ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
+                botItem.setAmount(counter);
+                player.getInventory().addItem(botItem);
+            }
+            if(cash > 0 && player!=null){
+                LunarSandBot.econ.depositPlayer(player,cash);
+                player.sendMessage(utils.color(plugin.getConfig().getString("cash-back").replace("%amount%",String.valueOf(cash))));
+            }
+
         });
 
     }
