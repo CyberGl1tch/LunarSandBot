@@ -1,6 +1,7 @@
 package me.magas8.Commands;
 
 
+import com.cryptomorin.xseries.XMaterial;
 import me.magas8.LunarSandBot;
 import me.magas8.Managers.ItemBuilder;
 import me.magas8.Runnables.BlockSpawn;
@@ -67,10 +68,15 @@ public class command implements CommandExecutor {
                             }
                             try {
                                 Integer howmany = Integer.parseInt(args[2]);
-                                ItemStack bot = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
-                                bot.setAmount(howmany);
-                                p.getInventory().addItem(bot);
-                                p.sendMessage(utils.color(plugin.getConfig().getString("command-succeed").replace("%player%", args[1]).replace("%amount%", howmany.toString())));
+                                if (XMaterial.matchXMaterial(plugin.getConfig().getString("bot-spawn-item-material")).isPresent()) {
+                                    ItemStack bot = new ItemBuilder(XMaterial.matchXMaterial(plugin.getConfig().getString("bot-spawn-item-material")).get().parseItem()).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
+
+                                    bot.setAmount(howmany);
+                                    p.getInventory().addItem(bot);
+                                    p.sendMessage(utils.color(plugin.getConfig().getString("command-succeed").replace("%player%", args[1]).replace("%amount%", howmany.toString())));
+                                }else{
+                                    p.sendMessage(utils.color("&c&lUnknown item "+plugin.getConfig().getString("bot-spawn-item-material")));
+                                }
                             } catch (NumberFormatException e) {
                                 sender.sendMessage(utils.color(plugin.getConfig().getString("command-amount-error")));
 

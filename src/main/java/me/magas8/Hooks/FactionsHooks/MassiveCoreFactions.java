@@ -3,6 +3,7 @@ package me.magas8.Hooks.FactionsHooks;
 
 
 
+import com.cryptomorin.xseries.XMaterial;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.Rel;
@@ -93,7 +94,7 @@ public class MassiveCoreFactions extends FactionHook implements Listener {
         }
         if(counter >0 && player!=null){
             player.getPlayer().sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
-            ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
+            ItemStack botItem = new ItemBuilder(XMaterial.matchXMaterial(plugin.getConfig().getString("bot-spawn-item-material")).get().parseItem()).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
             botItem.setAmount(counter);
             player.getPlayer().getInventory().addItem(botItem);
         }
@@ -120,7 +121,7 @@ public class MassiveCoreFactions extends FactionHook implements Listener {
         }
         if(counter >0 && player!=null){
             player.getPlayer().sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
-            ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
+            ItemStack botItem = new ItemBuilder(XMaterial.matchXMaterial(plugin.getConfig().getString("bot-spawn-item-material")).get().parseItem()).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
             botItem.setAmount(counter);
             player.getPlayer().getInventory().addItem(botItem);
         }

@@ -75,7 +75,7 @@ public class RemoveGUI extends MenuManager implements InventoryProvider {
                 }
                 //Check if inventory is valid
                 if(LunarSandBot.botGuis.containsKey(bot)) {
-                    ItemStack botdropItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
+                    ItemStack botdropItem = new ItemBuilder(XMaterial.matchXMaterial(plugin.getConfig().getString("bot-spawn-item-material")).get().parseItem()).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
                     utils.dropitem(invplayer,bot.getLocation(),botdropItem);
                     Double cash = bot.getBalance();
                     if(cash > 0){

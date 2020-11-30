@@ -1,5 +1,6 @@
 package me.magas8.Hooks.FactionsHooks;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.magas8.Hooks.FactionHook;
 import me.magas8.LunarSandBot;
 import me.magas8.Managers.ItemBuilder;
@@ -95,7 +96,7 @@ public class FactionsX extends FactionHook implements Listener {
         }
         if(counter >0 && player!=null){
             player.sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
-            ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
+            ItemStack botItem = new ItemBuilder(XMaterial.matchXMaterial(plugin.getConfig().getString("bot-spawn-item-material")).get().parseItem()).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
             botItem.setAmount(counter);
             player.getInventory().addItem(botItem);
         }
@@ -122,7 +123,7 @@ public class FactionsX extends FactionHook implements Listener {
         }
         if(counter >0 && player!=null){
             player.sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
-            ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
+            ItemStack botItem = new ItemBuilder(XMaterial.matchXMaterial(plugin.getConfig().getString("bot-spawn-item-material")).get().parseItem()).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
             botItem.setAmount(counter);
             player.getInventory().addItem(botItem);
         }
@@ -148,7 +149,7 @@ public class FactionsX extends FactionHook implements Listener {
             }
             if(counter >0 && player!=null){
                 player.sendMessage(utils.color(plugin.getConfig().getString("f-unclaim").replace("%amount%",String.valueOf(counter))));
-                ItemStack botItem = new ItemBuilder(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
+                ItemStack botItem = new ItemBuilder(XMaterial.matchXMaterial(plugin.getConfig().getString("bot-spawn-item-material")).get().parseItem()).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
                 botItem.setAmount(counter);
                 player.getInventory().addItem(botItem);
             }

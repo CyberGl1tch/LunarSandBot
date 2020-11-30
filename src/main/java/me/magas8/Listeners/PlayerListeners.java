@@ -55,7 +55,7 @@ public class PlayerListeners implements Listener {
     public void onPlaceSandBot(PlayerInteractEvent e){
         Player player = e.getPlayer();
         ItemStack item = player.getInventory().getItemInHand();
-        if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && item.getType().equals(Material.valueOf(plugin.getConfig().getString("bot-spawn-item-material").toUpperCase())) && item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals(utils.color(plugin.getConfig().getString("bot-spawn-item-name")))){
+        if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && XMaterial.matchXMaterial(plugin.getConfig().getString("bot-spawn-item-material")).isPresent() && item.getType().equals(XMaterial.matchXMaterial(plugin.getConfig().getString("bot-spawn-item-material")).get().parseMaterial()) && item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals(utils.color(plugin.getConfig().getString("bot-spawn-item-name")))){
            e.setCancelled(true);
             Block blockclick = e.getClickedBlock();
             Location loc = blockclick.getLocation();
