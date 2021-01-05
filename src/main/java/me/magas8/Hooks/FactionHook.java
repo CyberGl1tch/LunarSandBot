@@ -16,20 +16,10 @@ public class FactionHook implements PluginHooks<FactionHook> {
     public static String realName = "Factions";
     @Override
     public FactionHook setup(LunarSandBot pluginInstance) {
-        if (Bukkit.getServer().getPluginManager().getPlugin("FactionsX") !=null) {
-            hookName = "FactionsX";
-            realName = "FactionsX";
-            return (FactionHook)new FactionsX(pluginInstance);
-        }
-        if (Bukkit.getServer().getPluginManager().getPlugin("MassiveCore") !=null) {
-            hookName = "MassiveCoreFactions";
-            realName = "Factions";
-            return (FactionHook)new MassiveCoreFactions(pluginInstance);
-        }
         try {
             plugin = Bukkit.getServer().getPluginManager().getPlugin(getHookName());
         } catch (NullPointerException nullPointerException) {
-            return null;
+            plugin = null;
         }
         if (plugin!=null && plugin.getDescription().getAuthors().contains("Savag3life")) {
             hookName = "SupremeFactions";
@@ -41,6 +31,18 @@ public class FactionHook implements PluginHooks<FactionHook> {
             realName = "Factions";
             return (FactionHook)new FactionsUuid(pluginInstance);
         }
+        //Custom Named Plugins
+        if (Bukkit.getServer().getPluginManager().getPlugin("FactionsX") != null) {
+            hookName = "FactionsX";
+            realName = "FactionsX";
+            return (FactionHook) new FactionsX(pluginInstance);
+        }
+        if (Bukkit.getServer().getPluginManager().getPlugin("MassiveCore") != null) {
+            hookName = "MassiveCoreFactions";
+            realName = "Factions";
+            return (FactionHook) new MassiveCoreFactions(pluginInstance);
+        }
+
         return (FactionHook) new SaberFactions(pluginInstance);
     }
     public String getFactionTag(Player player) {

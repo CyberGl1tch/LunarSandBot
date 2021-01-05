@@ -1,6 +1,7 @@
 package me.magas8.Runnables;
 
 
+import com.cryptomorin.xseries.XMaterial;
 import me.magas8.LunarSandBot;
 import me.magas8.Managers.SandBot;
 import org.bukkit.Bukkit;
@@ -28,7 +29,7 @@ public class BlockSpawn implements Runnable {
             }
             boolean stopAnimation = true;
             for (Block block : bot.getLapisBlocks()) {
-                if (block.getLocation().getBlock().getType() != Material.valueOf(plugin.getConfig().getString("target-block").toUpperCase())) {
+                if (XMaterial.matchXMaterial(plugin.getConfig().getString("target-block").toUpperCase()).isPresent() && block.getLocation().getBlock().getType() != XMaterial.matchXMaterial(plugin.getConfig().getString("target-block").toUpperCase()).get().parseMaterial()) {
                     Bukkit.getServer().getScheduler().runTask(plugin,()->{
                         bot.removeBlock(block.getLocation().getBlock());
                     });

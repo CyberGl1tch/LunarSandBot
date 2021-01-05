@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
@@ -52,7 +53,6 @@ public class utils {
 
 
     public static  void spawnBot(Player player,Location loc){
-
 
         if(factionHook.getFactionId(player) == null){
             player.sendMessage(utils.color(plugin.getConfig().getString("no-faction")));
@@ -149,7 +149,7 @@ public class utils {
     public static Integer getFactionAliveBotsCount(String factionID){
         Integer count = 0;
         for(SandBot bot: LunarSandBot.sandBots){
-            if(bot.getFactionID() == factionID){
+            if(bot.getFactionID().equals(factionID)){
                 count++;
             }
         }
@@ -328,4 +328,5 @@ public class utils {
     public static void logToServer(String text,Boolean prefix){
         Bukkit.getServer().getConsoleSender().sendMessage((prefix ? "[LunarSandBot] " : "") + text);
     }
+
 }

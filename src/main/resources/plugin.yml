@@ -2,7 +2,7 @@ name: LunarSandBotRecoded
 version: ${project.version}
 main: me.magas8.LunarSandBot
 depend: [Vault]
-softdepend: [Factions,FactionsX,FactionsUUID,MassiveCore]
+softdepend: [Factions,FactionsX,FactionsUUID,MassiveCore,Multiverse-Core]
 commands:
   sandbot:
     description: Shows help menu of this plugin
