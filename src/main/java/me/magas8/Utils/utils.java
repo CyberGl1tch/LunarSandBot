@@ -50,6 +50,12 @@ public class utils {
         Vector v = new Vector().setY(0.7);
         drop.setVelocity(v);
     }
+    public static void dropitem(Location loc, ItemStack item){
+        ItemStack tmpitem = item;
+        Entity drop = loc.getWorld().dropItem(loc,item);
+        Vector v = new Vector().setY(0.7);
+        drop.setVelocity(v);
+    }
 
 
     public static  void spawnBot(Player player,Location loc){

@@ -3,9 +3,11 @@ package me.magas8.Listeners;
 import com.cryptomorin.xseries.XMaterial;
 import me.magas8.Enums.GuiTypes;
 import me.magas8.GUIS.FactionManageGui;
+import me.magas8.GUIS.RemoveGUI;
 import me.magas8.GUIS.SandBotGui;
 import me.magas8.Hooks.FactionHook;
 import me.magas8.LunarSandBot;
+import me.magas8.Managers.ItemBuilder;
 import me.magas8.Managers.SandBot;
 import me.magas8.Utils.Updater;
 import me.magas8.Utils.utils;
@@ -23,11 +25,14 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Collection;
 
 public class PlayerListeners implements Listener {
     private LunarSandBot plugin;
@@ -100,11 +105,29 @@ public class PlayerListeners implements Listener {
                     break;
                 }
             }
-           if(bot!=null)
+            if(bot!=null) e.setCancelled(true);
+        }
+    }
+    @EventHandler
+    public void onExplode(EntityExplodeEvent e){
+        Collection<Entity> entities = e.getLocation().getWorld().getNearbyEntities(e.getLocation(),10,10,10);
+        if(plugin.getConfig().getBoolean("sandbot-explosion-destroy") && entities.stream().anyMatch(entity -> entity.getType().equals(EntityType.ARMOR_STAND))) {
+            SandBot bot = null;
+            for (SandBot bottmp : LunarSandBot.sandBots) {
+                if (entities.stream().anyMatch(entity -> entity.getUniqueId().equals(bottmp.getSandbotUUID()))) {
+                    bot = bottmp;
+                    break;
+                }
+            }
+            if (bot != null) {
                 e.setCancelled(true);
+                ItemStack botdropItem = new ItemBuilder(XMaterial.matchXMaterial(plugin.getConfig().getString("bot-spawn-item-material")).get().parseItem()).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
+                utils.dropitem(bot.getLocation(), botdropItem);
+                utils.removeBot(bot);
             }
         }
 
+    }
 
     @EventHandler
     public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
@@ -120,11 +143,19 @@ public class PlayerListeners implements Listener {
                 }
             if(bot !=null) {
                 event.setCancelled(true);
-                if (!bot.getFactionID().equals(factionHook.getFactionId(player))) {
-                    player.sendMessage(utils.color(plugin.getConfig().getString("not-your-faction-bots")));
-                    return;
+                //Bypass permission players
+                if(!player.hasPermission("lunarsandbot.bypass")) {
+                    if (!bot.getFactionID().equals(factionHook.getFactionId(player)) && !plugin.getConfig().getBoolean("sandbot-fee-destroy")) {
+                        player.sendMessage(utils.color(plugin.getConfig().getString("not-your-faction-bots")));
+                    }else if (plugin.getConfig().getBoolean("sandbot-fee-destroy") && !bot.getFactionID().equals(factionHook.getFactionId(player))) {
+                        //In order to open remove gui for enemy players
+                        ((RemoveGUI) LunarSandBot.botGuis.get(bot).get(GuiTypes.REMOVEGUI)).open(player);
+                    }else{
+                        ((SandBotGui)LunarSandBot.botGuis.get(bot).get(GuiTypes.SANDBOTGUI)).open(player);
+                    }
+                }else{
+                    ((SandBotGui)LunarSandBot.botGuis.get(bot).get(GuiTypes.SANDBOTGUI)).open(player);
                 }
-                ((SandBotGui)LunarSandBot.botGuis.get(bot).get(GuiTypes.SANDBOTGUI)).open(player);
             }
 
         }

@@ -68,7 +68,8 @@ public class RemoveGUI extends MenuManager implements InventoryProvider {
             Player invplayer = (Player) e.getWhoClicked();
 
             if (e.isLeftClick() || e.isRightClick()) {
-                if(!factionHook.isFactionAdmin(player) && !bot.getOwnerUUID().equals(player.getUniqueId())){
+
+                if(!factionHook.isFactionAdmin(player) && !bot.getOwnerUUID().equals(player.getUniqueId()) && !player.hasPermission("lunarsandbot.bypass") && !plugin.getConfig().getBoolean("sandbot-fee-destroy")){
                     invplayer.sendMessage(utils.color(plugin.getConfig().getString("not-bot-owner").replace("%botowner%",bot.getOwnerName())));
                     invplayer.closeInventory();
                     return;
@@ -76,15 +77,29 @@ public class RemoveGUI extends MenuManager implements InventoryProvider {
                 //Check if inventory is valid
                 if(LunarSandBot.botGuis.containsKey(bot)) {
                     ItemStack botdropItem = new ItemBuilder(XMaterial.matchXMaterial(plugin.getConfig().getString("bot-spawn-item-material")).get().parseItem()).setColoredName(plugin.getConfig().getString("bot-spawn-item-name")).setColoredLore(plugin.getConfig().getStringList("bot-spawn-item-lore")).toItemStack();
-                    utils.dropitem(invplayer,bot.getLocation(),botdropItem);
-                    Double cash = bot.getBalance();
-                    if(cash > 0){
-                        LunarSandBot.econ.depositPlayer(invplayer,cash);
-                        invplayer.sendMessage(utils.color(plugin.getConfig().getString("cash-back").replace("%amount%",cash.toString())));
+                    if(plugin.getConfig().getBoolean("sandbot-fee-destroy")){
+                        double balanceplayer = LunarSandBot.econ.getBalance(player);
+                        double howmanytotake = (double) plugin.getConfig().getDouble("sandbot-fee-price");
+                        if(balanceplayer>=howmanytotake){
+                            LunarSandBot.econ.withdrawPlayer(player,howmanytotake);
+                            utils.dropitem(invplayer,bot.getLocation(),botdropItem);
+                            invplayer.sendMessage(utils.color(plugin.getConfig().getString("sandbot-removed-fee").replace("%fee%",String.valueOf(howmanytotake))));
+                            utils.removeBot(bot);
+                        }else{
+                            player.sendMessage(utils.color(plugin.getConfig().getString("insufficient-balance-player")));
+                        }
+                    }else{
+                        Double cash = bot.getBalance();
+                        if(cash > 0){
+                            LunarSandBot.econ.depositPlayer(invplayer,cash);
+                            invplayer.sendMessage(utils.color(plugin.getConfig().getString("cash-back").replace("%amount%",cash.toString())));
+                        }
+                        utils.dropitem(invplayer,bot.getLocation(),botdropItem);
+                        invplayer.sendMessage(utils.color(plugin.getConfig().getString("remove-succeed")));
+                        utils.removeBot(bot);
                     }
-                    invplayer.sendMessage(utils.color(plugin.getConfig().getString("remove-succeed")));
                     invplayer.closeInventory();
-                    utils.removeBot(bot);
+
                 }else{
                     invplayer.closeInventory();
                 }
@@ -94,7 +109,7 @@ public class RemoveGUI extends MenuManager implements InventoryProvider {
         contents.set(1, 6, ClickableItem.of(cancel, e -> {
             Player invplayer = (Player) e.getWhoClicked();
             if (e.isLeftClick() || e.isRightClick()) {
-                if(LunarSandBot.botGuis.containsKey(bot)) {
+                if(LunarSandBot.botGuis.containsKey(bot) && bot.getFactionID().equals(factionHook.getFactionId(player))){
                     ((SandBotGui) LunarSandBot.botGuis.get(bot).get(GuiTypes.SANDBOTGUI)).open(invplayer);
                 }else{
                     player.closeInventory();

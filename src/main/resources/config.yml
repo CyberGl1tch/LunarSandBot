@@ -182,3 +182,13 @@ command-amount-error: "&8&l[&c&l!&8&l] &7Please use numerical values."
 command-player-error: "&8&l[&c&l!&8&l] &7Cant find player."
 command-reload: "&8&l[&5&l!&8&l] &7Plugin config and data reloaded successfully!"
 command-succeed: "&8&l[&2&l!&8&l] &7You successfully gave &5%player% &ex%amount% &7sandbot item."
+
+##################################################
+#            Sandbot Destroy options             #
+##################################################
+#Makes SandBot vulnerable to explosions
+sandbot-explosion-destroy: false
+#Makes enemies capable of taking sandbot
+sandbot-fee-destroy: false
+sandbot-fee-price: 2000
+sandbot-removed-fee: "&8&l[&2&l!&8&l] &7SandBot removed successfully you paid %fee% fees."

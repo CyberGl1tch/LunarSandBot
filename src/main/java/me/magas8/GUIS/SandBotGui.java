@@ -123,7 +123,7 @@ public class SandBotGui extends MenuManager implements InventoryProvider {
             Player invplayer = (Player) e.getWhoClicked();
             double balanceplayer = LunarSandBot.econ.getBalance(player);
             double balancebot = bot.getBalance();
-            double howmanytotake = (double) plugin.getConfig().getInt("money-to-add");
+            double howmanytotake = (double) plugin.getConfig().getDouble("money-to-add");
             if(LunarSandBot.botGuis.containsKey(bot)) {
                 if (e.isLeftClick()) {
 
