@@ -22,6 +22,7 @@ public class SandBotGui extends MenuManager implements InventoryProvider {
     private SmartInventory sandbtsinv;
     private LunarSandBot plugin;
     private SandBot bot;
+
     public SandBotGui(LunarSandBot plugin,SandBot bot){
         this.plugin=plugin;
         this.bot=bot;

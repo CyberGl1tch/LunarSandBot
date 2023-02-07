@@ -16,21 +16,6 @@ public class FactionHook implements PluginHooks<FactionHook> {
     public static String realName = "Factions";
     @Override
     public FactionHook setup(LunarSandBot pluginInstance) {
-        try {
-            plugin = Bukkit.getServer().getPluginManager().getPlugin(getHookName());
-        } catch (NullPointerException nullPointerException) {
-            plugin = null;
-        }
-        if (plugin!=null && plugin.getDescription().getAuthors().contains("Savag3life")) {
-            hookName = "SupremeFactions";
-            realName = "Factions";
-            return (FactionHook)new SupremeFactions(pluginInstance);
-        }
-        if (plugin!=null && !plugin.getDescription().getAuthors().contains("ProSavage") && (plugin.getDescription().getAuthors().contains("drtshock") || plugin.getDescription().getAuthors().contains("Benzimmer"))) {
-            hookName = "FactionsUUID";
-            realName = "Factions";
-            return (FactionHook)new FactionsUuid(pluginInstance);
-        }
         //Custom Named Plugins
         if (Bukkit.getServer().getPluginManager().getPlugin("FactionsX") != null) {
             hookName = "FactionsX";
@@ -42,8 +27,30 @@ public class FactionHook implements PluginHooks<FactionHook> {
             realName = "Factions";
             return (FactionHook) new MassiveCoreFactions(pluginInstance);
         }
+        //Default plugins
+        try {
+            plugin = Bukkit.getServer().getPluginManager().getPlugin(getHookName());
+        } catch (NullPointerException nullPointerException) {
+            plugin = null;
+        }
+        if (plugin!=null && plugin.getDescription().getAuthors().contains("drtshock") && plugin.getDescription().getAuthors().contains("Driftay")) {
+            hookName = "SaberFactions";
+            realName = "Factions";
+            return (FactionHook) new SaberFactions(pluginInstance);
+        }
+        if (plugin!=null && plugin.getDescription().getAuthors().contains("Savag3life")) {
+            hookName = "SupremeFactions";
+            realName = "Factions";
+            return (FactionHook)new SupremeFactions(pluginInstance);
+        }
+        if (plugin!=null && !plugin.getDescription().getAuthors().contains("ProSavage") && (plugin.getDescription().getAuthors().contains("drtshock") || plugin.getDescription().getAuthors().contains("Benzimmer"))) {
+            hookName = "FactionsUUID";
+            realName = "Factions";
+            return (FactionHook)new FactionsUuid(pluginInstance);
+        }
 
-        return (FactionHook) new SaberFactions(pluginInstance);
+
+        return null;
     }
     public String getFactionTag(Player player) {
         throw new NotImplementedException("Server Faction plugin is not supported contact with dev");

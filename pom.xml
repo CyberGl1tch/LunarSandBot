@@ -6,7 +6,7 @@
 
     <groupId>me.magas8</groupId>
     <artifactId>LunarSandBot</artifactId>
-    <version>2.4</version>
+    <version>2.6</version>
     <packaging>jar</packaging>
 
     <name>LunarSandBotRecoded</name>
@@ -182,7 +182,7 @@
             <artifactId>FactionsX</artifactId>
             <version>0.6-PATREON</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/dependencies/FactionsX-0.6-PATREON.jar</systemPath>
+            <systemPath>${project.basedir}/dependencies/FactionsX-1.2-STABLE.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
